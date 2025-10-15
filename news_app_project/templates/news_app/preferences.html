@@ -1,0 +1,102 @@
+{% extends 'news_app/base.html' %}
+
+{% block title %}Настройки - NewsApp{% endblock %}
+
+{% block content %}
+<div class="preferences-container">
+    <h2>🎛️ Персонализация новостей</h2>
+    
+    <form method="post" class="preferences-form">
+        {% csrf_token %}
+        
+        <div class="form-section">
+            <h3 class="icon-theme">Внешний вид</h3>
+            <div class="form-group">
+                <label>{{ form.theme.label }}</label>
+                <div class="radio-group">
+                    {% for choice in form.theme %}
+                        {{ choice.tag }}
+                        <label for="{{ choice.id_for_label }}" class="radio-label">
+                            {% if choice.choice_label == 'Светлая' %} ☀️ {% else %} 🌙 {% endif %}
+                            {{ choice.choice_label }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>{{ form.language.label }}</label>
+                <div class="radio-group">
+                    {% for choice in form.language %}
+                        {{ choice.tag }}
+                        <label for="{{ choice.id_for_label }}" class="radio-label">
+                            {% if choice.choice_label == 'Русский' %} 🇷🇺 {% else %} 🇺🇸 {% endif %}
+                            {{ choice.choice_label }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3 class="icon-categories">Категории новостей</h3>
+            <div class="form-group">
+                <label>{{ form.categories.label }}</label>
+                <div class="checkbox-group">
+                    {% for choice in form.categories %}
+                        <div class="checkbox-item">
+                            {{ choice.tag }}
+                            <label for="{{ choice.id_for_label }}" class="checkbox-label">
+                                {% if choice.choice_label == 'Политика' %} 🏛️
+                                {% elif choice.choice_label == 'Спорт' %} ⚽
+                                {% elif choice.choice_label == 'Технологии' %} 💻
+                                {% elif choice.choice_label == 'Развлечения' %} 🎬
+                                {% elif choice.choice_label == 'Бизнес' %} 💼
+                                {% elif choice.choice_label == 'Здоровье' %} 🏥
+                                {% endif %}
+                                {{ choice.choice_label }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3 class="icon-notifications">Настройки уведомлений</h3>
+            <div class="form-group">
+                <label>{{ form.update_frequency.label }}</label>
+                {{ form.update_frequency }}
+            </div>
+            
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    {{ form.email_notifications }}
+                    <label for="{{ form.email_notifications.id_for_label }}" class="checkbox-label">
+                        📧 {{ form.email_notifications.label }}
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    {{ form.push_notifications }}
+                    <label for="{{ form.push_notifications.id_for_label }}" class="checkbox-label">
+                        📱 {{ form.push_notifications.label }}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">💾 Сохранить настройки</button>
+    </form>
+
+    {% if visited_pages %}
+    <div class="history-section">
+        <h3>📚 История просмотров</h3>
+        <ul class="history-list">
+            {% for page in visited_pages %}
+                <li>📄 {{ page|title }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

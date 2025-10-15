@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Персонализированные Новости{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="{% if theme == 'dark' %}dark-theme{% else %}light-theme{% endif %}">
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-logo">📰 NewsApp</h1>
+            <div class="nav-links">
+                <a href="{% url 'news_dashboard' %}">Главная</a>
+                <a href="{% url 'news_preferences' %}">Настройки</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 NewsApp. Все права защищены.</p>
+    </footer>
+</body>
+</html>

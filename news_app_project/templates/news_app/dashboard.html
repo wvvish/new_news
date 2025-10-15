@@ -1,0 +1,137 @@
+{% extends 'news_app/base.html' %}
+{% load static %}
+
+{% block title %}Главная - NewsApp{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="welcome-section">
+        <h2>Добро пожаловать в ваш персонализированный новостной дашборд! 📰</h2>
+        <p>Здесь вы найдете актуальные новости по выбранным вами категориям.</p>
+    </div>
+
+    <div class="news-grid">
+        {% for category in selected_categories %}
+            <div class="news-category">
+                <h3>
+                    {% if category == 'politics' %} 🏛️
+                    {% elif category == 'sports' %} ⚽
+                    {% elif category == 'technology' %} 💻
+                    {% elif category == 'entertainment' %} 🎬
+                    {% elif category == 'business' %} 💼
+                    {% elif category == 'health' %} 🏥
+                    {% endif %}
+                    {{ category|title }}
+                </h3>
+                <div class="news-items">
+                    {% if category == 'politics' %}
+                        {% for news in news_data.politics %}
+                        <div class="news-card news-card-with-image">
+                            <img src="/static/images/categories/{{ news.image }}" 
+                                 alt="{{ news.title }}" 
+                                 class="category-image"
+                                 onerror="this.style.display='none'">
+                            <div class="news-card-content">
+                                <h4>{{ news.title }}</h4>
+                                <p class="news-date">📅 {{ news.date }}</p>
+                                <p class="news-summary">{{ news.summary }}</p>
+                                <a href="{% url 'category_news' category %}" class="read-more">📖 Читать далее</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    
+                    {% elif category == 'sports' %}
+                        {% for news in news_data.sports %}
+                        <div class="news-card news-card-with-image">
+                            <img src="/static/images/categories/{{ news.image }}" 
+                                 alt="{{ news.title }}" 
+                                 class="category-image"
+                                 onerror="this.style.display='none'">
+                            <div class="news-card-content">
+                                <h4>{{ news.title }}</h4>
+                                <p class="news-date">📅 {{ news.date }}</p>
+                                <p class="news-summary">{{ news.summary }}</p>
+                                <a href="{% url 'category_news' category %}" class="read-more">📖 Читать далее</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    
+                    {% elif category == 'technology' %}
+                        {% for news in news_data.technology %}
+                        <div class="news-card news-card-with-image">
+                            <img src="/static/images/categories/{{ news.image }}" 
+                                 alt="{{ news.title }}" 
+                                 class="category-image"
+                                 onerror="this.style.display='none'">
+                            <div class="news-card-content">
+                                <h4>{{ news.title }}</h4>
+                                <p class="news-date">📅 {{ news.date }}</p>
+                                <p class="news-summary">{{ news.summary }}</p>
+                                <a href="{% url 'category_news' category %}" class="read-more">📖 Читать далее</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    
+                    {% elif category == 'entertainment' %}
+                        {% for news in news_data.entertainment %}
+                        <div class="news-card news-card-with-image">
+                            <img src="/static/images/categories/{{ news.image }}" 
+                                 alt="{{ news.title }}" 
+                                 class="category-image"
+                                 onerror="this.style.display='none'">
+                            <div class="news-card-content">
+                                <h4>{{ news.title }}</h4>
+                                <p class="news-date">📅 {{ news.date }}</p>
+                                <p class="news-summary">{{ news.summary }}</p>
+                                <a href="{% url 'category_news' category %}" class="read-more">📖 Читать далее</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    
+                    {% elif category == 'business' %}
+                        {% for news in news_data.business %}
+                        <div class="news-card news-card-with-image">
+                            <img src="/static/images/categories/{{ news.image }}" 
+                                 alt="{{ news.title }}" 
+                                 class="category-image"
+                                 onerror="this.style.display='none'">
+                            <div class="news-card-content">
+                                <h4>{{ news.title }}</h4>
+                                <p class="news-date">📅 {{ news.date }}</p>
+                                <p class="news-summary">{{ news.summary }}</p>
+                                <a href="{% url 'category_news' category %}" class="read-more">📖 Читать далее</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    
+                    {% elif category == 'health' %}
+                        {% for news in news_data.health %}
+                        <div class="news-card news-card-with-image">
+                            <img src="/static/images/categories/{{ news.image }}" 
+                                 alt="{{ news.title }}" 
+                                 class="category-image"
+                                 onerror="this.style.display='none'">
+                            <div class="news-card-content">
+                                <h4>{{ news.title }}</h4>
+                                <p class="news-date">📅 {{ news.date }}</p>
+                                <p class="news-summary">{{ news.summary }}</p>
+                                <a href="{% url 'category_news' category %}" class="read-more">📖 Читать далее</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <div class="no-categories">
+                <div style="text-align: center; padding: 3rem;">
+                    <h3>🎯 Выберите интересующие категории</h3>
+                    <p>Перейдите в <a href="{% url 'news_preferences' %}" style="color: #667eea; font-weight: bold;">настройки</a>, чтобы персонализировать вашу ленту новостей.</p>
+                    <a href="{% url 'news_preferences' %}" class="submit-btn" style="display: inline-block; margin-top: 1rem; text-decoration: none;">⚙️ Перейти к настройкам</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

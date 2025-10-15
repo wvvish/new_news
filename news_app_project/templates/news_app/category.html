@@ -1,0 +1,38 @@
+{% extends 'news_app/base.html' %}
+{% load static %}
+
+{% block title %}{{ category|title }} - NewsApp{% endblock %}
+
+{% block content %}
+<div class="category-page">
+    <!-- Заголовок категории с фоновым изображением -->
+    <div class="category-header" style="background-image: url('/static/images/categories/{{ category_background }}')">
+        <h1 class="category-title">📰 {{ category|title }}</h1>
+        <p>Актуальные новости и события</p>
+    </div>
+    
+    <div class="news-list">
+        {% for news in news_items %}
+        <article class="news-article">
+            <div class="news-card">
+                {% if news.image %}
+                <img src="/static/images/categories/{{ news.image }}" 
+                     alt="{{ news.title }}" 
+                     class="category-image"
+                     onerror="this.style.display='none'">
+                {% endif %}
+                <div class="news-card-content">
+                    <h3>{{ news.title }}</h3>
+                    <time class="article-date">📅 {{ news.date }}</time>
+                    <p class="article-summary">{{ news.summary }}</p>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="{% url 'news_dashboard' %}" class="back-link">← Назад к дашборду</a>
+    </div>
+</div>
+{% endblock %}
