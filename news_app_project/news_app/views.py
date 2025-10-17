@@ -99,15 +99,25 @@ CATEGORY_BACKGROUNDS = {
     'business': 'business.webp',
     'health': 'health.webp'
 }
+#render - функция для отображения HTML шаблонов
+
+#redirect - функция для перенаправления на другие страницы
+
+#HttpResponse - класс для простых текстовых ответов
+
+#NewsPreferencesForm - наша форма из файла forms.py (импорт из текущей папки)
 
 def set_cookie(response, key, value, days_expire=365):
     from django.utils.timezone import datetime, timedelta
+     # Проверяем указан ли срок
     if days_expire is None:
         max_age = 365 * 24 * 60 * 60  # one year
     else:
         max_age = days_expire * 24 * 60 * 60
     expires = datetime.strftime(datetime.now() + timedelta(seconds=max_age), "%a, %d-%b-%Y %H:%M:%S GMT")
     response.set_cookie(key, value, max_age=max_age, expires=expires, secure=False, httponly=False)
+
+# Функция настроек
 
 def news_preferences(request):
     # Получаем текущие настройки из cookies
@@ -121,9 +131,11 @@ def news_preferences(request):
     # Получаем историю просмотров
     visited_pages = request.COOKIES.get('visited_pages', '').split(',')
     visited_pages = [page for page in visited_pages if page]
-    
+
+    # Проверяем отправлена ли форма
     if request.method == 'POST':
         form = NewsPreferencesForm(request.POST)
+        # Проверяем корректны ли данные
         if form.is_valid():
             response = redirect('news_dashboard')
             
@@ -152,6 +164,10 @@ def news_preferences(request):
         'visited_pages': visited_pages[-5:],  # Последние 5 страниц
     })
 
+  # update_frequency - настройка того, как часто пользователь хочет получать обновления новостей.
+  # Эта функция вызывается когда пользователь заходит на главную страницу
+    # request - содержит всю информацию о запросе (cookies, метод, данные и т.д.)
+
 def news_dashboard(request):
     # Получаем настройки из cookies
     theme = request.COOKIES.get('theme', 'light')
@@ -162,6 +178,8 @@ def news_dashboard(request):
     
     # Обновляем историю просмотров
     response = render(request, 'news_app/dashboard.html', {
+
+        # Отображает данные
         'theme': theme,
         'language': language,
         'selected_categories': selected_categories,
@@ -171,12 +189,16 @@ def news_dashboard(request):
     # Сохраняем текущую страницу в историю
     visited_pages = request.COOKIES.get('visited_pages', '').split(',')
     visited_pages = [page for page in visited_pages if page]
-    current_page = 'news_dashboard'
+    current_page = 'news_dashboard' 
+
+    # Есть ли страница в списке посещеных страниц  
     if current_page not in visited_pages:
         visited_pages.append(current_page)
-    if len(visited_pages) > 10:  # Ограничиваем историю 10 страницами
+        # Соединяет все элементы списка visited_pages в одну строку
+    if len(visited_pages) > 10:  
         visited_pages = visited_pages[-10:]
-    
+
+    # Установка значения в куки
     set_cookie(response, 'visited_pages', ','.join(visited_pages))
     return response
 
@@ -192,11 +214,13 @@ def category_news(request, category):
         'category_background': CATEGORY_BACKGROUNDS.get(category, 'technology.jpg')
     })
     
+    # Получаем историю из Cookies
     visited_pages = request.COOKIES.get('visited_pages', '').split(',')
     visited_pages = [page for page in visited_pages if page]
     current_page = f'category_{category}'
     if current_page not in visited_pages:
         visited_pages.append(current_page)
+        # Если страниц больше 10, то оставляет последние 10
     if len(visited_pages) > 10:
         visited_pages = visited_pages[-10:]
     
